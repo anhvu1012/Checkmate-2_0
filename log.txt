@@ -1,0 +1,157 @@
+Sun Jun 12 16:25:18 2022
+Windows-10-10.0.19041
+Ren'Py 7.4.10.2178
+ 
+
+Bootstrap to the start of init.init took 0.06s
+Early init took 0.00s
+Loader init took 0.02s
+Loading error handling took 0.01s
+Loading script took 0.19s
+Loading save slot metadata. took 0.01s
+Loading persistent took 0.00s
+Importing _renpysteam: ImportError('No module named _renpysteam',)
+Running init code took 0.04s
+Loading analysis data took 0.01s
+Analyze and compile ATL took 0.00s
+Index archives took 0.00s
+Backing up script files to 'C:\\Users\\Phuong Anh\\AppData\\Roaming/RenPy/backups\\Checkmate 2_0':
+Dump and make backups. took 0.05s
+Cleaning cache took 0.00s
+Making clean stores took 0.00s
+Initial gc. took 0.02s
+DPI scale factor: 1.000000
+nvdrs: Loaded, about to disable thread optimizations.
+nvdrs: Disabled thread optimizations.
+Creating interface object took 0.23s
+Cleaning stores took 0.00s
+Init translation took 0.03s
+Build styles took 0.00s
+Load screen analysis took 0.00s
+Analyze screens took 0.01s
+Save screen analysis took 0.03s
+Prepare screens took 0.05s
+Save pyanalysis. took 0.00s
+Save bytecode. took 0.02s
+Running _start took 0.00s
+Performance test:
+Interface start took 0.05s
+
+Initializing gl2 renderer:
+primary display bounds: (0, 0, 1920, 1080)
+swap interval: 1 frames
+Windowed mode.
+Vendor: 'NVIDIA Corporation'
+Renderer: 'NVIDIA GeForce GTX 1050 Ti/PCIe/SSE2'
+Version: '4.6.0 NVIDIA 497.09'
+Display Info: None
+Screen sizes: virtual=(1280, 720) physical=(1280, 720) drawable=(1280, 720)
+Maximum texture size: 4096x4096
+
+Full traceback:
+  File "game/inventory_investigate.rpy", line 359, in script
+    call screen scene1
+  File "renpy/ast.py", line 2015, in execute
+    self.call("execute")
+  File "renpy/ast.py", line 2003, in call
+    return renpy.statements.call(method, parsed, *args, **kwargs)
+  File "renpy/statements.py", line 278, in call
+    return method(parsed, *args, **kwargs)
+  File "renpy/common/000statements.rpy", line 569, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+  File "renpy/exports.py", line 3134, in call_screen
+    rv = renpy.ui.interact(mouse="screen", type="screen", roll_forward=roll_forward)
+  File "renpy/ui.py", line 298, in interact
+    rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
+  File "renpy/display/core.py", line 3315, in interact
+    repeat, rv = self.interact_core(preloads=preloads, trans_pause=trans_pause, pause=pause, pause_start=pause_start, **kwargs)
+  File "renpy/display/core.py", line 3834, in interact_core
+    self.draw_screen(root_widget, fullscreen_video, (not fullscreen_video) or video_frame_drawn)
+  File "renpy/display/core.py", line 2555, in draw_screen
+    renpy.config.screen_height,
+  File "render.pyx", line 492, in renpy.display.render.render_screen
+  File "render.pyx", line 263, in renpy.display.render.render
+  File "renpy/display/layout.py", line 824, in render
+    surf = render(child, width, height, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 263, in renpy.display.render.render
+  File "renpy/display/layout.py", line 824, in render
+    surf = render(child, width, height, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 263, in renpy.display.render.render
+  File "renpy/display/layout.py", line 824, in render
+    surf = render(child, width, height, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 263, in renpy.display.render.render
+  File "renpy/display/screen.py", line 688, in render
+    child = renpy.display.render.render(self.child, w, h, st, at)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 263, in renpy.display.render.render
+  File "renpy/display/layout.py", line 824, in render
+    surf = render(child, width, height, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 263, in renpy.display.render.render
+  File "renpy/display/behavior.py", line 791, in render
+    rv = super(Button, self).render(width, height, st, at)
+  File "renpy/display/layout.py", line 1254, in render
+    st, at)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 263, in renpy.display.render.render
+  File "renpy/display/im.py", line 623, in render
+    return cache.get(self, render=True)
+  File "renpy/display/im.py", line 287, in get
+    surf = image.load()
+  File "renpy/display/im.py", line 704, in load
+    raise e
+IOError: Couldn't find file 'images/UI/inventory-item-inspect-hover.png'.
+
+While loading <'Image' u'images/UI/inventory-item-inspect-hover.png'>:
+  File "game/inventory_investigate.rpy", line 359, in script
+    call screen scene1
+  File "renpy/common/000statements.rpy", line 569, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+IOError: Couldn't find file 'images/UI/inventory-item-inspect-hover.png'.
+Resetting cache.
+Bootstrap to the start of init.init took 112.05s
+Early init took 0.00s
+Loader init took 0.02s
+Loading error handling took 0.01s
+Loading script took 0.09s
+Loading save slot metadata. took 0.01s
+Loading persistent took 0.00s
+Importing _renpysteam: ImportError('No module named _renpysteam',)
+Running init code took 0.03s
+Loading analysis data took 0.02s
+Analyze and compile ATL took 0.00s
+Index archives took 0.00s
+Dump and make backups. took 0.05s
+Cleaning cache took 0.00s
+Making clean stores took 0.00s
+Initial gc. took 0.03s
+DPI scale factor: 1.000000
+nvdrs: Loaded, about to disable thread optimizations.
+nvdrs: Disabled thread optimizations.
+Creating interface object took 0.23s
+Cleaning stores took 0.00s
+Init translation took 0.03s
+Build styles took 0.00s
+Load screen analysis took 0.01s
+Analyze screens took 0.00s
+Save screen analysis took 0.00s
+Prepare screens took 0.05s
+Save pyanalysis. took 0.00s
+Save bytecode. took 0.00s
+Running _start took 0.00s
+Performance test:
+Interface start took 0.04s
+
+Initializing gl2 renderer:
+primary display bounds: (0, 0, 1920, 1080)
+swap interval: 1 frames
+Windowed mode.
+Vendor: 'NVIDIA Corporation'
+Renderer: 'NVIDIA GeForce GTX 1050 Ti/PCIe/SSE2'
+Version: '4.6.0 NVIDIA 497.09'
+Display Info: None
+Screen sizes: virtual=(1280, 720) physical=(1280, 720) drawable=(1280, 720)
+Maximum texture size: 4096x4096
