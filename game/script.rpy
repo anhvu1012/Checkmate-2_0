@@ -579,6 +579,8 @@ label scene_before_investigation:
 
     show su neutral at left
     su "We've arrived. Just give me a moment. I'm going to open the door."
+    # Sound of keychain then door opening
+    Su: "There! Welcome in!"
     su "You can look around all you want, [title]!"
 
     jump setupScene1
@@ -598,7 +600,7 @@ label talk_with_Su:
     a_left "”Mom and Lu”? That reminds me, you’ve never mentioned your mother, haven’t you?"
     show su sad at right
     su "Ah... She left us and went to heaven 2 years ago."
-    a_left "I'm so sorry kid..."
+    a_left "Oh... I'm so sorry kid..."
     show su neutral at right
     su "It’s ok... I just hope she’ll have a great time up there."
     su "..."
