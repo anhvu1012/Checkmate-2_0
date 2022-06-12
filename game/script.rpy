@@ -347,7 +347,7 @@ label about_dad:
 
     mc "If he didn't bribe for his current position then sure he is."
 
-    a_left "Right, I forget again how corrupted our city is."
+    a_left "Yeah."
 
     mc "Su, have you checked out his office yet?"
     hide athena
@@ -532,7 +532,6 @@ label choice_last_question_2:
         show athena neutral at left
         a_left "Such a simple reason and she goes so far for that..."
         mc "Her choices and reasons are none of our business so don’t be bothered by that, Athena."
-        a_left "..."
         jump end_chap_1
 
     label let_it_go:
