@@ -15,9 +15,12 @@ init python:
 
     def environmentEvents(event, x, y, at):
         global char_talked
-        global talked_with_Su
+        global talked_with_Su_about_drawing
         global drawing_examined
         global wordpuzzle_taken
+        global family_pic_examined
+        global clock_examined
+        global talked_with_Su_about_famPic
         #if current event is cursor being on item -> show hover image
         if event.type == renpy.pygame_sdl2.MOUSEMOTION:
             for item in environment_sprites:
@@ -53,7 +56,7 @@ init python:
                                 char_talked = False
 
                         elif item.type == "drawing":
-                            if char_talked == False and talked_with_Su == False:
+                            if char_talked == False and talked_with_Su_about_drawing == False:
                                 renpy.show_screen("drawing")
                                 characterSay(who = "Athena", what = ["It's a drawing.", "Su must have drawn it.", "Let's talk to her!"])
                                 char_talked = True
@@ -66,22 +69,30 @@ init python:
                         elif item.type == "flower-pot":
                             if char_talked == False:
                                 renpy.show_screen("flower_pot")
-                                characterSay(who = "Athena", what = ["I don't think there's something wrong about that flower pot."])
+                                characterSay(who = "Su", what = ["Strange... I thought it should be a bouquet here?"])
                                 char_talked = True
                             char_talked = False
 
                         elif item.type == "sun-clock":
-                            if char_talked == False:
+                            if char_talked == False and clock_examined == False:
                                 renpy.show_screen("sun_clock")
-                                characterSay(who = "Athena", what = ["It's a clock.", "What time is it actually?"])
+                                characterSay(who = "Su", what = ["Huh? It’s dead? It ran completely fine yesterday, I wonder why..."])
                                 char_talked = True
+                                clock_examined = True
+                            else:
+                                renpy.show_screen("sun_clock")
+                                characterSay(who = "Athena", what = ["The wall clock has an appearance resembling that of the sun", "Both its hands point at 6."])
                             char_talked = False
 
                         elif item.type == "family-pic":
-                            if char_talked == False:
+                            if char_talked == False and talked_with_Su_about_famPic == False:
                                 renpy.show_screen("family_pic")
-                                characterSay(who = "Athena", what = ["Look! It's Su's family.", "They look so happy."])
+                                characterSay(who = "Athena", what = ["It's a family picture.", "Let's talk to Su!"])
                                 char_talked = True
+                                family_pic_examined = True
+                            else:
+                                renpy.show_screen("family_pic")
+                                characterSay(who = "Athena", what = ["Her family looks so happy in this picture."])
                             char_talked = False
 
     def characterSay(who, what):
@@ -255,7 +266,7 @@ screen characterSay(who = None, what = None):
 screen drawing:
     modal True
     zorder 4
-    imagebutton auto "images/UI/close-button-%s.png" action [Hide("drawing"), Show("Su_appear")] xpos 914 ypos 95
+    imagebutton auto "images/UI/close-button-%s.png" action If(su_on_screen == False, true = [Hide("drawing"), Show("Su_appear"), SetVariable("su_on_screen", "True")], false = Hide("drawing"))  xpos 914 ypos 95
     text "Drawing" size 30 align(0.5, 0.20)
     image "Items Pop Up/drawing-pop-up.png" align (0.5, 0.4) at half_size
     # if talked_with_Su == False:
@@ -266,7 +277,7 @@ screen drawing:
 screen family_pic:
     modal True
     zorder 4
-    imagebutton auto "images/UI/close-button-%s.png" action Hide("family_pic") xpos 917 ypos 95
+    imagebutton auto "images/UI/close-button-%s.png" action If(su_on_screen == False, true = [Hide("family_pic"), Show("Su_appear2"), SetVariable("su_on_screen", "True")], false = Hide("family_pic"))  xpos 917 ypos 95
     text "A family photo" size 30 align(0.5, 0.20)
     image "Items Pop Up/family-pic-pop-up.png" align (0.5, 0.4) at half_size
 
@@ -285,8 +296,13 @@ screen sun_clock:
     image "Items Pop Up/sun-clock-pop-up.png" align (0.5, 0.4) at half_size
 
 screen Su_appear:
-    if drawing_examined == True and talked_with_Su == False:
+    zorder 3
+    if drawing_examined == True and talked_with_Su_about_drawing == False:
         imagebutton auto "images/stickman_%s.png" action Jump("talk_with_Su") xpos 200 ypos 300
+screen Su_appear2:
+    zorder 3
+    if family_pic_examined == True and talked_with_Su_about_famPic == False:
+        imagebutton auto "images/stickman_%s.png" action Jump("talk_about_famPic") xpos 200 ypos 300
 
 screen scene1:
     add environment_SM

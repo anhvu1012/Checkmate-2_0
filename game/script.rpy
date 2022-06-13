@@ -4,6 +4,7 @@ default grey = 0
 default black = 0
 default white = 0
 default athena_friendliness = 0
+default su_friendliness = 0
 default title = None
 default non_b = False
 
@@ -586,7 +587,7 @@ label scene_before_investigation:
     jump setupScene1
 
 label talk_with_Su:
-    $talked_with_Su = True
+    $talked_with_Su_about_drawing = True
     hide screen drawing
     hide screen UI
     hide screen inventory2
@@ -618,14 +619,100 @@ label talk_with_Su:
     hide athena
     hide su
 
-    # menu:
-    #     extend ''
-    #     "Remain silent":
-    #         pass
-    #     "Say something":
 
+    menu:
+        extend ''
+        "Remain silent":
+            jump return_investigation
+        "Say something":
+            menu:
+                extend ''
+                "He must have his reasons":
+                    $ grey += 1
+                    $ su_friendliness += 1
+                    jump his_reasons
+                "Don’t meddle in others' business":
+                    $ black += 1
+                    jump others_business
+                "You did the right thing but chose the wrong time":
+                    $ white += 1
+                    $ su_friendliness =+ 1
+                    $ athena_friendliness += 1
+                    jump wrong_time
 
-    show screen UI
+    label his_reasons:
+        mc "There must be some reasons behind one’s action. Ask him when we find him, okey?"
+        show su neutral at left
+        su "Uhm, you’re right! Let’s find dad first!"
+        hide su
+        jump return_investigation
+
+    label others_business:
+        mc "It’s his own problem and you shouldn’t meddle in like that, little girl."
+        mc "Being pushy just makes him more on edge and may feel annoying."
+        show athena frown at left
+        a_left "Can something nice come from your mouth?"
+        mc "I thought I was being nice enough?"
+        a_left "Try harder."
+        hide athena
+        mc "Well... just let him have some space, when he feels ready to talk, then he’ll talk."
+        show su sad at left
+        su "Alright..."
+        hide su
+        jump return_investigation
+
+    label wrong_time:
+        mc "You acted out of noble causes and there’s nothing wrong about that."
+        mc "But maybe you should consider when would be the right moment to express your intention, little girl."
+        show athena neutral at left
+        a_left "So it seems he can’t bear the fact that his wife is gone. It hurts him so much that he tries to avoid everything related to her?"
+        mc "The man has his own way to deal with loss and pain. Time is what he needs."
+        a_left "Even so he has no right to make the child suffer with his issues. A good father won’t do that. It isn’t only him who is sad here, is it?"
+        mc "How can you ask one to forget its own pain so as to recognize the other’s?"
+        a_left "You can’t but you can share the pain and surpass it together!"
+        a_left "Would it be better than endure it in loneliness?" # with mc_name
+        mc "That... sounds nice, indeed."
+        hide athena
+        show su sad at left
+        su "I don’t want to leave dad alone!"
+        hide su
+        $renpy.pause(1.5, hard=True)
+        jump return_investigation
+
+    label return_investigation:
+        $ su_on_screen = False
+        if family_pic_examined == False:
+            show athena neutral at right
+            a_left "So who is Lu standing next to your mom? Your sister?"
+            show su neutral at left
+            su "Yes, she is my younger twin, we also have a photo just the two of us."
+            su "Over there, on the TV cabinet!"
+            hide athena
+            hide su
+        else:
+            show athena sad at left
+            a_left "Oh Lu, poor child, I hope she’ll get better soon"
+            hide athena
+        show screen UI
+        call screen scene1
+
+label talk_about_famPic:
+    $talked_with_Su_about_famPic = True
+    hide screen drawing
+    hide screen UI
+    hide screen inventory2
+    show su neutral at left
+    su "We took it on a summer vacation years ago. It was so fun!"
+    show athena neutral at right
+    athena "The little girl on the right just looks exactly like you."
+    su "She's my twin sister. Her name is Lunally."
+    athena "Where is she right now?"
+    su "She’s sickbed and in the hospital. I haven’t visited her for a while since dad doesn’t allow me."
+    athena "Huh? Why so?"
+    su "He said Lu is under special treatment. I can’t come to visit her till the treatment is over."
+    hide su
+    hide athena
+    $ su_on_screen = False
     call screen scene1
 
 label solve_word_puzzle:
@@ -687,10 +774,14 @@ label start:
 
     $dialogue = {}
     $char_talked = False
+    $talked_with_Su_about_drawing = False
+    $talked_with_Su_about_famPic = False
     $talked_with_Su = False
     $clock_examined = False
     $drawing_examined = False
+    $family_pic_examined = False
     $wordpuzzle_taken = False
+    $su_on_screen = False
 
     $answ1 = False
     $answ2 = False
