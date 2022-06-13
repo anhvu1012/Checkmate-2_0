@@ -580,7 +580,7 @@ label scene_before_investigation:
     show su neutral at left
     su "We've arrived. Just give me a moment. I'm going to open the door."
     # Sound of keychain then door opening
-    Su: "There! Welcome in!"
+    su "There! Welcome in!"
     su "You can look around all you want, [title]!"
 
     jump setupScene1
