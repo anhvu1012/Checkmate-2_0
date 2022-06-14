@@ -2,9 +2,13 @@
 errors listed below, and try again.
 
 
-File "game/script.rpy", line 583: expected statement.
-    Su: "There! Welcome in!"
-      ^
+File "game/script.rpy", line 601: expected 'image_name_component' not found.
+    show "images/scene-livingroom-bg.png"
+         ^
+
+File "game/script.rpy", line 603: expected 'image_name_component' not found.
+    show "scene-livingroom-bg-with-wp.png"
+         ^
 
 Ren'Py Version: Ren'Py 7.4.10.2178
-Mon Jun 13 10:02:46 2022
+Tue Jun 14 20:50:49 2022

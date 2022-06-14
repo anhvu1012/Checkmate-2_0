@@ -125,7 +125,7 @@ label after_choice_gender:
     show su neutral at left
     unk2 "Ah right..."
 
-    $ mc_name = renpy.input("What's your name?", length = 12)
+    $ mc_name = renpy.input("What's your name?", length = 10)
     $ mc_name = mc_name.strip()
 
     if non_b == True:
@@ -556,7 +556,7 @@ label end_chap_1:
     with dissolve
     $ renpy.pause(2.5, hard=True)
     hide text with dissolve
-    stop music fadeout 3.0
+    stop music fadeout 1.5
     jump scene_before_investigation
 
 # Anfang Kap. 2
@@ -584,7 +584,7 @@ label scene_before_investigation:
     $ renpy.pause(1.5, hard=True)
     show su neutral at left
     su "We've arrived. Just give me a moment. I'm going to open the door."
-    play sound "audio/stuck-key-38228.mp3"
+    play sound "audio/stuck-key-38228.mp3" volume 1.0
     $ renpy.pause(1, hard=True)
     su "There! Welcome in!"
     su "You can look around all you want, [title]!"
@@ -598,9 +598,9 @@ label talk_with_Su:
     hide screen inventory2
 
     if wordpuzzle_taken == True:
-        scene scene-livingroom-bg
+        show livingroom
     else:
-        scene scene-livingroom-bg-with-wp
+        show livingroom_with_wp
 
     show athena neutral at left
     a_left "”Mom and Lu”? That reminds me, you’ve never mentioned your mother, haven’t you?"
@@ -686,7 +686,7 @@ label talk_with_Su:
 
     label return_investigation:
         $ su_on_screen = False
-        if family_pic_examined == False:
+        if talked_with_Su_about_famPic == False:
             show athena neutral at right
             a_left "So who is Lu standing next to your mom? Your sister?"
             show su neutral at left
@@ -698,10 +698,20 @@ label talk_with_Su:
             show athena sad at left
             a_left "Oh Lu, poor child, I hope she’ll get better soon"
             hide athena
+
+        if livingroom_on_screen == True:
+            hide screen livingroom
+        if livingroom_with_wp_on_screen == True:
+            hide screen livingroom_with_wp
         show screen UI
         call screen scene1
 
 label talk_about_famPic:
+    if wordpuzzle_taken == True:
+        show livingroom
+    else:
+        show livingroom_with_wp
+
     $talked_with_Su_about_famPic = True
     hide screen drawing
     hide screen UI
@@ -718,6 +728,13 @@ label talk_about_famPic:
     hide su
     hide athena
     $ su_on_screen = False
+
+    if livingroom_on_screen == True:
+        hide screen livingroom
+    if livingroom_with_wp_on_screen == True:
+        hide screen livingroom_with_wp
+
+    show screen UI
     call screen scene1
 
 label solve_word_puzzle:
@@ -787,6 +804,9 @@ label start:
     $family_pic_examined = False
     $wordpuzzle_taken = False
     $su_on_screen = False
+
+    $livingroom_on_screen = False
+    $livingroom_with_wp_on_screen = False
 
     $answ1 = False
     $answ2 = False

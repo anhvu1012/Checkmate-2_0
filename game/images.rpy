@@ -8,7 +8,8 @@ image crow = "images/scene chap 1/crow.png"
 image red district = "images/scene chap 1/red district.png"
 image black = "images/Black.png"
 image tea shop = "images/scene chap 1/tea shop.png"
-image livingroom = "images/scene-livingroom-bg-with-wp.png"
+image livingroom_with_wp = "images/scene-livingroom-bg-with-wp.png"
+image livingroom = "images/scene-livingroom-bg.png"
 
 ## images characters
 

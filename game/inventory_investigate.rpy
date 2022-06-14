@@ -47,13 +47,12 @@ init python:
                     if item.x <= x <= item.x + item.width and item.y <= y <= item.y + item.height:
                         # check current type and what to do with it
                         if item.type == "word-puzzle":
-                            if char_talked == False:
-                                characterSay(who = "Athena", what = ["Hmm, these look like some drawings from Su.", "Oh, I think there is something underneath as well." , "Let's pick it up and take a closer look in the inventory!"])
+                            if char_talked == False and wordpuzzle_taken == False:
+                                characterSay(who = "Athena", what = ["Hmm, these look like some drawings from Su.", "Oh, I think there is something underneath as well." , "Take a closer look in the inventory!"])
                                 char_talked = True
-                            else:
                                 addToInventory(["word-puzzle"])
                                 wordpuzzle_taken = True
-                                char_talked = False
+                            char_talked = False
 
                         elif item.type == "drawing":
                             if char_talked == False and talked_with_Su_about_drawing == False:
@@ -372,7 +371,7 @@ label setupScene1:
                 environment_sprites[-1].y = 100
 
     #show created sprites on another screen
-    call screen scene1
+    call screen scene1 with dissolve
 
 transform half_size:
     zoom 0.5
