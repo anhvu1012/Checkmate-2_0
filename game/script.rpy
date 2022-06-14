@@ -11,6 +11,7 @@ default non_b = False
 # In Game musics
 define op = "audio/myuu-unspoken.mp3"
 define teashop = "audio/Circus Marcus_Aux_puces_n4_Noctambule.mp3"
+define investigation_scene = "audio/myuu_God_Rest_Ye_Merry_Gentlemen_Dark_Piano_Version.mp3"
 
 # The game starts here.
 label opening_scene:
@@ -58,7 +59,8 @@ label scene_red_district:
     hide text
 
     show crow with fade
-    $ renpy.pause(3)
+    play sound "audio/crow.mp3"
+    $ renpy.pause(2.5)
     scene red district with fade
     "Another day in Red District again"
     "As it should always be, the street’s crowded with lecherous customers or people who’ve lost their sense of reality."
@@ -453,7 +455,7 @@ label after_choice_say:
     hide su
     # show mc neutral at right
     mc "Done with your life lesson?"
-    mc "Alright then, time for the final question."
+    mc "Alright then..."
 
     menu:
         extend ''
@@ -525,14 +527,15 @@ label choice_last_question_2:
 
         show su surprise at left
         su "Please, I want to see my dad! I’m willing to pay you with all I have!"
-        play sound "audio/meta-coin-sound-effect.mp3"
-        $ renpy.pause(0.7, hard=True)
+        play sound "audio/metal-coin-sound-effect.mp3"
+        $ renpy.pause(1.3, hard=True)
 
         mc "That’s enough for now, we’ll take the rest once we find your father."
         hide su
         show athena neutral at left
         a_left "Such a simple reason and she goes so far for that..."
         mc "Her choices and reasons are none of our business so don’t be bothered by that, Athena."
+        hide athena
         jump end_chap_1
 
     label let_it_go:
@@ -540,6 +543,7 @@ label choice_last_question_2:
         mc "Fine, I will let it pass this time."
         show su neutral at left
         su "Yay, thank you very much, [title]!"
+        hide su
         jump end_chap_1
 
 label choice_last_question_3:
@@ -555,14 +559,15 @@ label end_chap_1:
     stop music fadeout 3.0
     jump scene_before_investigation
 
+# Anfang Kap. 2
 label scene_before_investigation:
     scene black
     show bg black with dissolve
     show text "{=chap}Chapter II{/=chap}"
     with dissolve
     $ renpy.pause(2.5, hard=True)
+    play music investigation_scene volume 0.3 fadein 2.0
     hide text with dissolve
-    # play music teashop volume 0.3 fadein 2.0
     show athena neutral at left
     a_left "Where's your little suitcase?"
     mc "Why do you ask?"
@@ -573,14 +578,14 @@ label scene_before_investigation:
     hide athena
     show screen UI
     $ renpy.pause(1.5, hard=True)
-    show athena neutral at left
     a_left "Now go! Su is waiting!"
     hide athena
     hide bg black with dissolve
-
+    $ renpy.pause(1.5, hard=True)
     show su neutral at left
     su "We've arrived. Just give me a moment. I'm going to open the door."
-    # Sound of keychain then door opening
+    play sound "audio/stuck-key-38228.mp3"
+    $ renpy.pause(1, hard=True)
     su "There! Welcome in!"
     su "You can look around all you want, [title]!"
 
@@ -795,4 +800,9 @@ label start:
     jump opening_scene
 
 label leave:
+    show text "{=chap}End chapter II.{/=chap}"
+    with dissolve
+    $ renpy.pause(2.5, hard=True)
+    hide text with dissolve
+    stop music fadeout 3.0
     return
