@@ -20,6 +20,7 @@ init python:
         global wordpuzzle_taken
         global family_pic_examined
         global clock_examined
+        global flower_pot_examined
         global talked_with_Su_about_famPic
         #if current event is cursor being on item -> show hover image
         if event.type == renpy.pygame_sdl2.MOUSEMOTION:
@@ -46,11 +47,11 @@ init python:
                 for item in environment_sprites:
                     if item.x <= x <= item.x + item.width and item.y <= y <= item.y + item.height:
                         # check current type and what to do with it
-                        if item.type == "word-puzzle":
+                        if item.type == "word-puzzle-unsolved":
                             if char_talked == False and wordpuzzle_taken == False:
-                                characterSay(who = "Athena", what = ["Hmm, these look like some drawings from Su.", "Oh, I think there is something underneath as well." , "Take a closer look in the inventory!"])
+                                characterSay(who = "Athena", what = ["It's something underneath the drawing." , "Take a closer look in the inventory!"])
                                 char_talked = True
-                                addToInventory(["word-puzzle"])
+                                addToInventory(["word-puzzle-unsolved"])
                                 wordpuzzle_taken = True
                             char_talked = False
 
@@ -66,10 +67,14 @@ init python:
                             char_talked = False
 
                         elif item.type == "flower-pot":
-                            if char_talked == False:
-                                renpy.show_screen("flower_pot")
-                                characterSay(who = "Su", what = ["Strange... I thought it should be a bouquet here?"])
+                            if char_talked == False and flower_pot_examined == False:
+                                # renpy.show_screen("flower_pot")
+                                characterSay(who = "Su", what = ["Strange... I thought it should be a bouquet here?", "Eh?! There is something inside this flower pot.", "Let's take a closer look in the inventory!"])
+                                addToInventory(["empty-piece-of-paper"])
                                 char_talked = True
+                                flower_pot_examined = True
+                            else:
+                                characterSay(who = "Su", what = ["Why would someone put a piece of paper in a flower pot? So weird!"])
                             char_talked = False
 
                         elif item.type == "sun-clock":
@@ -122,11 +127,8 @@ init python:
     def addToInventory(items):
         for item in items:
             inventory_items.append(item)
-            #check for correct state of item to add to list
-            if item == "word-puzzle":
-                item_image = Image("Inventory Items/inventory-word-puzzle-unsolved.png")
-            else:
-                item_image = Image("Inventory Items/inventory-{}.png".format(item))
+
+            item_image = Image("Inventory Items/inventory-{}.png".format(item))
 
             # adding the sprite as a reference to inventory sprites, using inventory SM to create sprite
             t = Transform(child = item_image, zoom = 0.5)
@@ -142,8 +144,14 @@ init python:
             inventory_sprites[-1].original_y = 0
 
             # keep track of different states of an item
-            if item == "word-puzzle":
+            if item == "word-puzzle-unsolved":
                 inventory_sprites[-1].state = "unsolved"
+            elif item == "word-puzzle-solved":
+                inventory_sprites[-1].state = "solved"
+                for i in inventory_sprites:
+                    if i.type == "word-puzzle-unsolved":
+                        removeInventoryItem(item = i)
+                        break
             else:
                 inventory_sprites[-1].state = "default"
 
@@ -166,6 +174,12 @@ init python:
         item.destroy() # SM deletes this item
         environment_sprites.pop(environment_sprites.index(item)) # remove item from sprites list by findind its correct index in the list
         environment_items.pop(environment_items.index(item.type)) # remove item from name list by finding its type (name) in the list
+
+    def removeInventoryItem(item):
+        item.destroy() # SM deletes this item
+        inventory_sprites.pop(inventory_sprites.index(item)) # remove item from sprites list by findind its correct index in the list
+        inventory_items.pop(inventory_items.index(item.type))
+        repositionInventoryItems()
 
 screen UI:
     zorder 1 # controls the order of showing screen (screen with greater number above screen with lesser number)
@@ -212,14 +226,14 @@ screen inspectItem(items):
                 if temp_name.lower() == items[0]:
                     item_name = name
         text "{}".format(item_name) size 30 align(0.5, 0.15) # text with name to show on screen
-        if items[0] == "word-puzzle":
-            $wordpuzzle_state = inventory_sprites[inventory_items.index("word-puzzle")].state # looking for index of word puzzle inside of inventory and pass it to inv sprites
+        if items[0] == "word-puzzle-unsolved":
+            # $wordpuzzle_state = inventory_sprites[inventory_items.index("word-puzzle")].state # looking for index of word puzzle inside of inventory and pass it to inv sprites
             frame:
                 align (0.5, 0.75)
                 textbutton "Click here if you want to solve this world puzzle" action [Hide("inspectItem"), Hide("UI"), Hide("inventory2"), Jump("solve_word_puzzle")]
-            image "Items Pop Up/{}-{}-pop-up.png".format("word-puzzle", wordpuzzle_state) align (0.5, 0.4) at half_size
-        else:
-            image "Items Pop Up/{}-pop-up.png".format(items[0]) align (0.5, 0.4) at half_size
+        #     image "Items Pop Up/{}-{}-pop-up.png".format("word-puzzle", wordpuzzle_state) align (0.5, 0.4) at half_size
+        # else:
+        image "Items Pop Up/{}-pop-up.png".format(items[0]) align (0.5, 0.4) at half_size
 
 screen characterSay(who = None, what = None):
     modal True
@@ -265,7 +279,7 @@ screen characterSay(who = None, what = None):
 screen drawing:
     modal True
     zorder 4
-    imagebutton auto "images/UI/close-button-%s.png" action If(su_on_screen == False, true = [Hide("drawing"), Show("Su_appear"), SetVariable("su_on_screen", "True")], false = Hide("drawing"))  xpos 914 ypos 95
+    imagebutton auto "images/UI/close-button-%s.png" action Hide("drawing") xpos 914 ypos 95
     text "Drawing" size 30 align(0.5, 0.20)
     image "Items Pop Up/drawing-pop-up.png" align (0.5, 0.4) at half_size
     # if talked_with_Su == False:
@@ -276,7 +290,7 @@ screen drawing:
 screen family_pic:
     modal True
     zorder 4
-    imagebutton auto "images/UI/close-button-%s.png" action If(su_on_screen == False, true = [Hide("family_pic"), Show("Su_appear2"), SetVariable("su_on_screen", "True")], false = Hide("family_pic"))  xpos 917 ypos 95
+    imagebutton auto "images/UI/close-button-%s.png" action Hide("family_pic") xpos 917 ypos 95
     text "A family photo" size 30 align(0.5, 0.20)
     image "Items Pop Up/family-pic-pop-up.png" align (0.5, 0.4) at half_size
 
@@ -294,28 +308,29 @@ screen sun_clock:
     text "A sun clock" size 30 align(0.5, 0.20)
     image "Items Pop Up/sun-clock-pop-up.png" align (0.5, 0.4) at half_size
 
-screen Su_appear:
-    zorder 3
-    if drawing_examined == True and talked_with_Su_about_drawing == False:
-        imagebutton auto "images/stickman_%s.png" action Jump("talk_with_Su") xpos 200 ypos 300
-screen Su_appear2:
-    zorder 3
-    if family_pic_examined == True and talked_with_Su_about_famPic == False:
-        imagebutton auto "images/stickman_%s.png" action Jump("talk_about_famPic") xpos 200 ypos 300
+# screen Su_appear:
+#     zorder 3
+#     if drawing_examined == True and talked_with_Su_about_drawing == False:
+#         imagebutton auto "images/stickman_%s.png" action Jump("talk_with_Su") xpos 200 ypos 300
+# screen Su_appear2:
+#     zorder 3
+#     if family_pic_examined == True and talked_with_Su_about_famPic == False:
+#         imagebutton auto "images/stickman_%s.png" action Jump("talk_about_famPic") xpos 200 ypos 300
 
 screen scene1:
     add environment_SM
-    frame:
-        #background "#FFFFFF40"
-        xpos 5 ypos 5
-        hbox:
-            textbutton "Leave" action Jump("leave")
+    # frame:
+    #     #background "#FFFFFF40"
+    #     xpos 5 ypos 5
+    #     hbox:
+    #         textbutton "Leave" action Jump("leave")
+    imagebutton auto "images/Su_standing_%s.png" action Jump("choice_what_to_talk_with_Su") xpos 440 ypos 210
 
 label setupScene1:
 
     scene scene-livingroom-bg
     # filling environment items list, pick up or interact
-    $environment_items = ["word-puzzle", "drawing", "flower-pot", "family-pic", "sun-clock"]
+    $environment_items = ["word-puzzle-unsolved", "drawing", "flower-pot", "family-pic", "sun-clock"]
 
     #iterate through each of the items to create sprite for them
     python:
@@ -340,7 +355,7 @@ label setupScene1:
             environment_sprites[-1].hover_image = hover_image
 
             #images different sizes, check for item type then add its image size and position on screen
-            if item == "word-puzzle":
+            if item == "word-puzzle-unsolved":
                 environment_sprites[-1].width = 34
                 environment_sprites[-1].height = 18
                 environment_sprites[-1].x = 741

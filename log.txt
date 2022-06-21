@@ -1,4 +1,4 @@
-Tue Jun 14 21:23:01 2022
+Tue Jun 21 11:18:26 2022
 Windows-10-10.0.19041
 Ren'Py 7.4.10.2178
  
@@ -7,12 +7,12 @@ Bootstrap to the start of init.init took 0.06s
 Early init took 0.00s
 Loader init took 0.02s
 Loading error handling took 0.01s
-Loading script took 0.14s
+Loading script took 0.25s
 Loading save slot metadata. took 0.01s
 Loading persistent took 0.00s
 Importing _renpysteam: ImportError('No module named _renpysteam',)
 Running init code took 0.04s
-Loading analysis data took 0.01s
+Loading analysis data took 0.02s
 Analyze and compile ATL took 0.00s
 Index archives took 0.00s
 Backing up script files to 'C:\\Users\\Phuong Anh\\AppData\\Roaming/RenPy/backups\\Checkmate 2_0':

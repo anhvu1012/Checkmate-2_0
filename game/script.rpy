@@ -490,6 +490,9 @@ label choice_last_question_1:
     $ renpy.pause(2.5, hard=True)
     hide letter with dissolve
 
+    $ addToInventory(["letter-from-vincent"])
+    $ got_letter = True
+
     hide su
     show athena surprise at left
     a_left "Is it him?"
@@ -562,7 +565,7 @@ label end_chap_1:
 # Anfang Kap. 2
 label scene_before_investigation:
     scene black
-    show bg black with dissolve
+    show tea shop with dissolve
     show text "{=chap}Chapter II{/=chap}"
     with dissolve
     $ renpy.pause(2.5, hard=True)
@@ -573,14 +576,20 @@ label scene_before_investigation:
     mc "Why do you ask?"
     show athena frown at left
     a_left "You don't take it with you? What if you find something in that house? Where would you put it huh?"
-    mc "You're at nagging again. Can you just pass me the suitcase?"
-    a_left "Gosh.. Here, take it!"
+    if got_letter == True:
+        mc "You're at nagging again."
+        a_left "So what?"
+        a_left "I've also put the letter from earlier in it. Here, take it!"
+    else:
+        mc "You're at nagging again. Can you just pass me the suitcase?"
+        a_left "Gosh.. Here, take it!"
     hide athena
     show screen UI
     $ renpy.pause(1.5, hard=True)
+    show athena frown at left
     a_left "Now go! Su is waiting!"
     hide athena
-    hide bg black with dissolve
+    hide tea shop with dissolve
     $ renpy.pause(1.5, hard=True)
     show su neutral at left
     su "We've arrived. Just give me a moment. I'm going to open the door."
@@ -591,16 +600,50 @@ label scene_before_investigation:
 
     jump setupScene1
 
-label talk_with_Su:
-    $talked_with_Su_about_drawing = True
-    hide screen drawing
+label choice_what_to_talk_with_Su:
     hide screen UI
     hide screen inventory2
+    show su neutral at left
+    if family_pic_examined == False and drawing_examined == False:
+        su "Have you found something?"
+        menu:
+            extend ''
+            "Not yet.":
+                jump continue_investigate
+            "I want to leave this room.":
+                jump want_to_leave
+    else:
+        su "What do you want to talk about?"
+        menu:
+            extend ''
+            "About the family picture..." if family_pic_examined == True and talked_with_Su_about_famPic == False:
+                hide su
+                jump talk_about_famPic
+            "About the drawing on the table..." if drawing_examined == True and talked_with_Su_about_drawing == False:
+                hide su
+                jump talk_about_drawing
+            "Nothing":
+                hide su
+                show screen UI
+                call screen scene1
+            "I want to leave this room.":
+                jump want_to_leave
+
+label continue_investigate:
+    su "Come to me again if you find something!"
+    hide su
+    show screen UI
+    call screen scene1
+
+label talk_about_drawing:
+    $talked_with_Su_about_drawing = True
 
     if wordpuzzle_taken == True:
         show livingroom
+        $livingroom_on_screen = True
     else:
         show livingroom_with_wp
+        $livingroom_with_wp_on_screen = True
 
     show athena neutral at left
     a_left "”Mom and Lu”? That reminds me, you’ve never mentioned your mother, haven’t you?"
@@ -685,7 +728,7 @@ label talk_with_Su:
         jump return_investigation
 
     label return_investigation:
-        $ su_on_screen = False
+        $ renpy.pause(0.5, hard=True)
         if talked_with_Su_about_famPic == False:
             show athena neutral at right
             a_left "So who is Lu standing next to your mom? Your sister?"
@@ -700,22 +743,23 @@ label talk_with_Su:
             hide athena
 
         if livingroom_on_screen == True:
-            hide screen livingroom
+            hide livingroom
         if livingroom_with_wp_on_screen == True:
-            hide screen livingroom_with_wp
+            hide livingroom_with_wp
+
         show screen UI
         call screen scene1
 
 label talk_about_famPic:
     if wordpuzzle_taken == True:
         show livingroom
+        $livingroom_on_screen = True
     else:
         show livingroom_with_wp
+        $livingroom_with_wp_on_screen = True
 
     $talked_with_Su_about_famPic = True
-    hide screen drawing
-    hide screen UI
-    hide screen inventory2
+
     show su neutral at left
     su "We took it on a summer vacation years ago. It was so fun!"
     show athena neutral at right
@@ -727,17 +771,18 @@ label talk_about_famPic:
     su "He said Lu is under special treatment. I can’t come to visit her till the treatment is over."
     hide su
     hide athena
-    $ su_on_screen = False
+    show screen UI
 
     if livingroom_on_screen == True:
-        hide screen livingroom
+        hide livingroom
     if livingroom_with_wp_on_screen == True:
-        hide screen livingroom_with_wp
+        hide livingroom_with_wp
 
-    show screen UI
     call screen scene1
 
 label solve_word_puzzle:
+    hide screen Su_appear
+    hide screen Su_appear2
     show screen solving_word_puzzle
     show athena neutral at left
     a_left "It will take some time to solve this."
@@ -747,18 +792,28 @@ label solve_word_puzzle:
     call screen choose_question
 
 label wp_solved:
+    $ wordpuzzle_SOLVED = True
+    $ addToInventory(["word-puzzle-solved"])
     hide screen solving_word_puzzle
     show screen wp_solved
     a_left "Now that you have solved the word puzzle, should we go somewhere else or do you still want to look around more?"
     menu:
         extend ''
-        "Go somewhere else":
+        "Go to the next location":
             jump leave
         "Stay here":
             hide screen wp_solved
             hide athena
             show screen UI
             call screen scene1
+
+# label ask_about_wordpuzzle:
+#     show su surprise
+#     su "Oh yeah, you found a word puzzle right?"
+#     su "Have you solved it yet?"
+#     menu:
+#         extend ''
+#         ""
 
 label start:
 
@@ -780,7 +835,7 @@ label start:
 
     # lists for all items name (in game)
     $environment_items_name = []
-    $inventory_items_name = ["Word Puzzle"]
+    $inventory_items_name = ["Word Puzzle Unsolved", "Word Puzzle Solved", "Letter From Vincent", "Empty Piece Of Paper"]
 
     # keep track of what current scene we are in
     $current_scene = "scene1"
@@ -803,7 +858,9 @@ label start:
     $drawing_examined = False
     $family_pic_examined = False
     $wordpuzzle_taken = False
-    $su_on_screen = False
+    $wordpuzzle_SOLVED = False
+    $flower_pot_examined = False
+    $got_letter = False
 
     $livingroom_on_screen = False
     $livingroom_with_wp_on_screen = False
@@ -818,6 +875,25 @@ label start:
     $keyword = False
 
     jump opening_scene
+
+label want_to_leave:
+    if clock_examined == True and drawing_examined == True and family_pic_examined == True and wordpuzzle_taken == True and flower_pot_examined == True:
+        show su surprise at left
+        su "You are done with everything here? How fast!"
+        show su neutral at left
+        su "Then I will show you my father's study room. Follow me!"
+        hide su
+        jump leave
+    else:
+        show su surprise at left
+        su "You haven't looked at everything... Are you sure you want to leave?"
+        menu:
+            extend ''
+            "Yes":
+                hide su
+                jump leave
+            "I changed my mind.":
+                jump continue_investigate
 
 label leave:
     show text "{=chap}End chapter II.{/=chap}"
