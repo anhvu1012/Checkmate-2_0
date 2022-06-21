@@ -280,7 +280,7 @@ screen drawing:
     modal True
     zorder 4
     imagebutton auto "images/UI/close-button-%s.png" action Hide("drawing") xpos 914 ypos 95
-    text "Drawing" size 30 align(0.5, 0.20)
+    text "Drawing" size 30 align(0.5, 0.20) ypos 110
     image "Items Pop Up/drawing-pop-up.png" align (0.5, 0.4) at half_size
     # if talked_with_Su == False:
         # textbutton "Go and talk with Su" action Jump("talk_with_Su") align (0.5, 0.75)
@@ -291,21 +291,21 @@ screen family_pic:
     modal True
     zorder 4
     imagebutton auto "images/UI/close-button-%s.png" action Hide("family_pic") xpos 917 ypos 95
-    text "A family photo" size 30 align(0.5, 0.20)
+    text "A family photo" size 30 align(0.5, 0.20) ypos 110
     image "Items Pop Up/family-pic-pop-up.png" align (0.5, 0.4) at half_size
 
 screen flower_pot:
     modal True
     zorder 4
     imagebutton auto "images/UI/close-button-%s.png" action Hide("flower_pot") xpos 917 ypos 95
-    text "A flower pot" size 30 align(0.5, 0.20)
+    text "A flower pot" size 30 align(0.5, 0.20) ypos 110
     image "Items Pop Up/flower-pot-pop-up.png" align (0.5, 0.4) at half_size
 
 screen sun_clock:
     modal True
     zorder 4
     imagebutton auto "images/UI/close-button-%s.png" action Hide("sun_clock") xpos 917 ypos 95
-    text "A sun clock" size 30 align(0.5, 0.20)
+    text "A sun clock" size 30 align(0.5, 0.20) ypos 110
     image "Items Pop Up/sun-clock-pop-up.png" align (0.5, 0.4) at half_size
 
 # screen Su_appear:
